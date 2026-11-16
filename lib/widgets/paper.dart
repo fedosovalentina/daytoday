@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../copy.dart';
 import '../theme.dart';
 import 'icons.dart';
 
@@ -66,7 +67,7 @@ class MarkerText extends StatelessWidget {
   Widget build(BuildContext context) {
     final bar = (style.fontSize ?? 16) * 0.34;
     return Stack(
-      alignment: Alignment.centerLeft,
+      alignment: AlignmentDirectional.centerStart,
       children: [
         Positioned(
           left: 0,
@@ -208,15 +209,15 @@ class BackChevron extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'Back',
+      label: context.l10n.back,
       excludeSemantics: true,
       child: InkResponse(
         onTap: onPressed,
         radius: 24,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(2, 4, 8, 4),
+          padding: const EdgeInsetsDirectional.fromSTEB(2, 4, 8, 4),
           child: Text(
-            '‹',
+            Directionality.of(context) == TextDirection.rtl ? '›' : '‹',
             style: AppText.of(size: 34, weight: FontWeight.w700, height: 1),
           ),
         ),
@@ -234,7 +235,7 @@ class AddHabitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'New habit',
+      label: context.l10n.newHabit,
       excludeSemantics: true,
       child: SizedBox(
         width: 68,
@@ -242,8 +243,8 @@ class AddHabitButton extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Positioned(
-              left: 0,
+            PositionedDirectional(
+              start: 0,
               bottom: 0,
               child: OffsetCard(
                 color: AppColors.white,
@@ -266,8 +267,8 @@ class AddHabitButton extends StatelessWidget {
                 ),
               ),
             ),
-            const Positioned(
-              right: -2,
+            const PositionedDirectional(
+              end: -2,
               top: -2,
               child: IgnorePointer(child: TreeDoodle()),
             ),
@@ -300,10 +301,10 @@ class SectionHead extends StatelessWidget {
       children: [
         Expanded(
           child: Align(
-            alignment: Alignment.centerLeft,
+            alignment: AlignmentDirectional.centerStart,
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
+              alignment: AlignmentDirectional.centerStart,
               child: onTitle == null
                   ? label
                   : GestureDetector(onTap: onTitle, child: label),
@@ -337,7 +338,7 @@ class AdSlot extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = tall ? MediaQuery.sizeOf(context).height / 6 : 76.0;
     return Semantics(
-      label: 'Advertisement placeholder',
+      label: context.l10n.adLabel,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: pageInset),
         child: CustomPaint(
@@ -346,11 +347,11 @@ class AdSlot extends StatelessWidget {
             height: height,
             width: double.infinity,
             child: Align(
-              alignment: Alignment.topLeft,
+              alignment: AlignmentDirectional.topStart,
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Text(
-                  'AD',
+                  context.l10n.adMark,
                   style: AppText.of(
                     size: 11,
                     weight: FontWeight.w700,
@@ -469,7 +470,7 @@ Future<bool> confirm(
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Keep', style: AppText.of(size: 16)),
+            child: Text(context.l10n.keep, style: AppText.of(size: 16)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),

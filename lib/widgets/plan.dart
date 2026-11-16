@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../copy.dart';
 import '../models.dart';
 import '../theme.dart';
 import 'icons.dart';
@@ -22,7 +23,7 @@ class PlanCard extends StatelessWidget {
     final label = habit.label;
     return Semantics(
       button: true,
-      label: '${habit.name}, $streak day streak',
+      label: context.l10n.habitCardLabel(habit.name, streak),
       child: OffsetCard(
         color: habit.tone.color,
         radius: 22,
@@ -107,7 +108,7 @@ class HabitTile extends StatelessWidget {
           children: [
             Semantics(
               button: true,
-              label: 'Open ${habit.name}',
+              label: context.l10n.openHabit(habit.name),
               excludeSemantics: true,
               child: InkWell(
                 onTap: onOpen,
@@ -134,8 +135,8 @@ class HabitTile extends StatelessWidget {
               child: Semantics(
                 button: true,
                 label: done
-                    ? 'Mark ${habit.name} not done'
-                    : 'Mark ${habit.name} done',
+                    ? context.l10n.markNotDone(habit.name)
+                    : context.l10n.markDone(habit.name),
                 excludeSemantics: true,
                 child: InkWell(
                   onTap: onToggle,
@@ -167,7 +168,7 @@ class HabitTile extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                weekdayList(habit.days),
+                                weekdayList(habit.days, context.l10n),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: AppText.of(
@@ -287,12 +288,13 @@ class WeekdayPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final labels = shortWeekdays(context.l10n);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        for (var index = 0; index < weekdayShort.length; index++)
+        for (var index = 0; index < labels.length; index++)
           _DayChip(
-            label: weekdayShort[index],
+            label: labels[index],
             filled: selected.contains(index + 1),
             color: color,
             onTap: () => onToggle(index + 1),
@@ -329,9 +331,19 @@ class _DayChip extends StatelessWidget {
             width: 36,
             height: 36,
             child: Center(
-              child: Text(
-                label,
-                style: AppText.of(size: 12, weight: FontWeight.w700, height: 1),
+              child: Padding(
+                padding: const EdgeInsets.all(3),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    style: AppText.of(
+                      size: 12,
+                      weight: FontWeight.w700,
+                      height: 1,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -468,16 +480,16 @@ class SuggestionChips extends StatelessWidget {
 
   final void Function(String name, HabitTone tone) onPick;
 
-  static const options = [
-    ('Gym', HabitTone.pink),
-    ('Run', HabitTone.peach),
-    ('Read', HabitTone.blue),
-    ('Water', HabitTone.yellow),
-    ('Stretch', HabitTone.lavender),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final options = [
+      (l10n.suggestGym, HabitTone.pink),
+      (l10n.suggestRun, HabitTone.peach),
+      (l10n.suggestRead, HabitTone.blue),
+      (l10n.suggestWater, HabitTone.yellow),
+      (l10n.suggestStretch, HabitTone.lavender),
+    ];
     return Wrap(
       spacing: 8,
       runSpacing: 8,
@@ -523,13 +535,13 @@ class HabitNameField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.code,
-    this.hint = 'Habit name',
+    this.hint,
     this.onChanged,
   });
 
   final TextEditingController controller;
   final String code;
-  final String hint;
+  final String? hint;
   final ValueChanged<String>? onChanged;
 
   @override
@@ -548,7 +560,7 @@ class HabitNameField extends StatelessWidget {
             style: AppText.of(size: 22, weight: FontWeight.w700),
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
-              hintText: hint,
+              hintText: hint ?? context.l10n.habitNameHint,
               hintStyle: AppText.of(
                 size: 22,
                 weight: FontWeight.w500,

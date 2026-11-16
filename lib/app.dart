@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'l10n/app_localizations.dart';
 import 'screens/today_screen.dart';
 import 'store.dart';
 import 'theme.dart';
@@ -53,10 +54,12 @@ class DayToDayApp extends StatelessWidget {
       child: HabitScope(
         store: store,
         child: MaterialApp(
-          title: 'Day to Day',
+          title: 'DAY Today Plan',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.light,
           themeMode: ThemeMode.light,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: const TodayScreen(),
         ),
       ),

@@ -126,44 +126,6 @@ String dateKey(DateTime day) {
 String completionKey(String habitId, DateTime day) =>
     '$habitId|${dateKey(day)}';
 
-const monthNames = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
-const weekdayNames = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday',
-];
-
-const weekdayShort = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
-
-String longDate(DateTime day) =>
-    '${weekdayNames[day.weekday - 1]} ${day.day} ${monthNames[day.month - 1]} ${day.year}';
-
-String mediumDate(DateTime day) =>
-    '${weekdayNames[day.weekday - 1]} ${day.day} ${monthNames[day.month - 1]}';
-
-String planTitle(DateTime day, DateTime today) {
-  if (sameDay(day, today)) return "Today's plan";
-  return "${weekdayNames[day.weekday - 1]}'s plan";
-}
-
 class HabitSnapshot {
   const HabitSnapshot({required this.habits, required this.done});
 
@@ -183,11 +145,4 @@ class HabitSnapshot {
     final done = (json['done'] as List<dynamic>).cast<String>().toSet();
     return HabitSnapshot(habits: habits, done: done);
   }
-}
-
-String weekdayList(Set<int> days) {
-  return [
-    for (var index = 0; index < weekdayShort.length; index++)
-      if (days.contains(index + 1)) weekdayShort[index],
-  ].join(' · ');
 }

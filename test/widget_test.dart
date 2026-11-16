@@ -7,11 +7,17 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   final today = DateTime(2026, 11, 16, 8);
 
-  Future<HabitStore> pump(WidgetTester tester, Size size) async {
+  Future<HabitStore> pump(
+    WidgetTester tester,
+    Size size, {
+    Locale locale = const Locale('en'),
+  }) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = size;
+    tester.platformDispatcher.localesTestValue = [locale];
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.platformDispatcher.clearLocalesTestValue);
 
     final store = HabitStore(
       repository: MemoryRepository(),
@@ -75,6 +81,26 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Open English'));
     await tester.pumpAndSettle();
     expect(find.text('Save changes'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('russian follows the phone language', (tester) async {
+    await pump(tester, const Size(390, 844), locale: const Locale('ru'));
+
+    expect(find.text('План на сегодня'), findsOneWidget);
+    expect(find.text('0 из 4'), findsOneWidget);
+    expect(find.text('пн'), findsWidgets);
+    expect(find.text('ENG'), findsOneWidget);
+  });
+
+  testWidgets('arabic lays the page out from the right', (tester) async {
+    await pump(tester, const Size(390, 844), locale: const Locale('ar'));
+
+    expect(find.text('خطة اليوم'), findsOneWidget);
+    expect(
+      Directionality.of(tester.element(find.text('خطة اليوم'))),
+      TextDirection.rtl,
+    );
     expect(tester.takeException(), isNull);
   });
 }

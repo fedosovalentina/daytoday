@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../app.dart';
+import '../copy.dart';
 import '../models.dart';
 import '../stats.dart';
 import '../theme.dart';
@@ -30,7 +31,7 @@ class DayScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, pageInset, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(8, 8, pageInset, 0),
             child: Row(
               children: [
                 BackChevron(onPressed: () => Navigator.of(context).pop()),
@@ -38,9 +39,9 @@ class DayScreen extends StatelessWidget {
                 Expanded(
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerLeft,
+                    alignment: AlignmentDirectional.centerStart,
                     child: MarkerText(
-                      mediumDate(day),
+                      mediumDate(context, day),
                       style: AppText.of(size: 24, weight: FontWeight.w700),
                     ),
                   ),
@@ -57,7 +58,7 @@ class DayScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: Text(
-                      'Nothing planned for this day.',
+                      context.l10n.nothingPlanned,
                       style: AppText.of(
                         size: 18,
                         italic: true,
@@ -86,7 +87,7 @@ class DayScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                 ],
                 DashedButton(
-                  label: '+ New habit',
+                  label: context.l10n.addNewHabit,
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(

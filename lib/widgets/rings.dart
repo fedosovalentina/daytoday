@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../copy.dart';
 import '../models.dart';
 import '../theme.dart';
 
@@ -16,13 +17,19 @@ class WeekdayHeader extends StatelessWidget {
       weight: FontWeight.w500,
       color: AppColors.ink.withValues(alpha: 0.7),
     );
-    return Row(
-      children: [
-        for (final label in weekdayShort)
-          Expanded(
-            child: Text(label, textAlign: TextAlign.center, style: style),
-          ),
-      ],
+    return SizedBox(
+      height: 18,
+      child: Row(
+        children: [
+          for (final label in shortWeekdays(context.l10n))
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(label, textAlign: TextAlign.center, style: style),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -47,16 +54,18 @@ class MonthTitle extends StatelessWidget {
       children: [
         Expanded(
           child: Align(
-            alignment: Alignment.centerLeft,
+            alignment: AlignmentDirectional.centerStart,
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
+              alignment: AlignmentDirectional.centerStart,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _Chevron(
-                    label: '‹',
-                    tooltip: 'Previous month',
+                    label: Directionality.of(context) == TextDirection.rtl
+                        ? '›'
+                        : '‹',
+                    tooltip: context.l10n.previousMonth,
                     onPressed: onPrevious,
                   ),
                   Text(
@@ -64,8 +73,10 @@ class MonthTitle extends StatelessWidget {
                     style: AppText.of(size: 26, weight: FontWeight.w700),
                   ),
                   _Chevron(
-                    label: '›',
-                    tooltip: 'Next month',
+                    label: Directionality.of(context) == TextDirection.rtl
+                        ? '‹'
+                        : '›',
+                    tooltip: context.l10n.nextMonth,
                     onPressed: onNext,
                   ),
                 ],
@@ -133,7 +144,8 @@ class MonthSwipe extends StatelessWidget {
       onHorizontalDragEnd: (details) {
         final velocity = details.primaryVelocity ?? 0;
         if (velocity.abs() < 180) return;
-        onSwipe(velocity < 0 ? 1 : -1);
+        final rtl = Directionality.of(context) == TextDirection.rtl;
+        onSwipe((velocity < 0) != rtl ? 1 : -1);
       },
       child: child,
     );
@@ -205,7 +217,7 @@ class WeekStrip extends StatelessWidget {
                 for (final day in days)
                   Expanded(
                     child: Text(
-                      weekdayShort[day.weekday - 1],
+                      shortWeekdays(context.l10n)[day.weekday - 1],
                       textAlign: TextAlign.center,
                       style: AppText.of(
                         size: 13,

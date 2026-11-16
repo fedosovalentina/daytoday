@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app.dart';
+import '../copy.dart';
 import '../models.dart';
 import '../stats.dart';
 import '../theme.dart';
@@ -80,9 +81,9 @@ class _TodayScreenState extends State<TodayScreen> {
                     onTap: () => _openDay(_day),
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
+                      alignment: AlignmentDirectional.centerStart,
                       child: MarkerText(
-                        longDate(_day),
+                        longDate(context, _day),
                         style: AppText.of(size: 24, weight: FontWeight.w700),
                       ),
                     ),
@@ -102,13 +103,13 @@ class _TodayScreenState extends State<TodayScreen> {
             ),
             if (!sameDay(_day, today))
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: AlignmentDirectional.centerStart,
                 child: GestureDetector(
                   onTap: () => setState(() => _selected = today),
                   child: Padding(
                     padding: const EdgeInsets.only(top: 2),
                     child: Text(
-                      'Back to today',
+                      context.l10n.backToToday,
                       style: AppText.of(
                         size: 14,
                         italic: true,
@@ -129,8 +130,10 @@ class _TodayScreenState extends State<TodayScreen> {
             ),
             const SizedBox(height: 26),
             SectionHead(
-              title: planTitle(_day, today),
-              trailing: score.planned == 0 ? null : score.label,
+              title: planTitle(context, _day, today),
+              trailing: score.planned == 0
+                  ? null
+                  : scoreLabel(context, score.done, score.planned),
               onTitle: () => _openDay(_day),
             ),
             const SizedBox(height: 12),
@@ -138,11 +141,11 @@ class _TodayScreenState extends State<TodayScreen> {
               SizedBox(
                 height: 112,
                 child: Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: AlignmentDirectional.centerStart,
                   child: Text(
                     habits.isEmpty
-                        ? 'Tap + and plant the first habit.'
-                        : 'A free day.',
+                        ? context.l10n.emptyPlan
+                        : context.l10n.freeDay,
                     style: AppText.of(
                       size: 18,
                       italic: true,
@@ -157,7 +160,7 @@ class _TodayScreenState extends State<TodayScreen> {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   clipBehavior: Clip.none,
-                  padding: const EdgeInsets.fromLTRB(2, 4, 8, 8),
+                  padding: const EdgeInsetsDirectional.fromSTEB(2, 4, 8, 8),
                   itemCount: habits
                       .where((habit) => habit.scheduledOn(_day))
                       .length,
@@ -186,8 +189,8 @@ class _TodayScreenState extends State<TodayScreen> {
               ),
             const SizedBox(height: 22),
             MonthTitle(
-              label: monthNames[_day.month - 1],
-              trailing: month.label,
+              label: monthName(context, _day),
+              trailing: scoreLabel(context, month.done, month.planned),
               onPrevious: () => _shiftMonth(-1),
               onNext: () => _shiftMonth(1),
             ),

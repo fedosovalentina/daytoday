@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:daytoday/l10n/app_localizations.dart';
 import 'package:daytoday/models.dart';
 import 'package:daytoday/seed.dart';
 import 'package:daytoday/stats.dart';
 import 'package:daytoday/store.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -9,9 +14,9 @@ void main() {
 
   test('the anchor day is Monday 16 November 2026', () {
     expect(today.weekday, DateTime.monday);
-    expect(longDate(today), 'Monday 16 November 2026');
-    expect(planTitle(today, today), "Today's plan");
-    expect(planTitle(DateTime(2026, 11, 19), today), "Thursday's plan");
+    expect(today.year, 2026);
+    expect(today.month, 11);
+    expect(today.day, 16);
   });
 
   test('cards keep the first three letters and the quiet remainder', () {
@@ -71,7 +76,6 @@ void main() {
     final score = monthScore([habit], done, today);
     expect(score.planned, 9);
     expect(score.done, 2);
-    expect(score.label, '2 of 9');
   });
 
   test('the first page has a living week and a round-trippable snapshot', () {
@@ -87,11 +91,53 @@ void main() {
     expect(again.done, snap.done);
 
     Habit habit(String id) => snap.habits.firstWhere((item) => item.id == id);
-    expect(dayScore(snap.habits, snap.done, today).label, '0 of 4');
+    final monday = dayScore(snap.habits, snap.done, today);
+    expect(monday.done, 0);
+    expect(monday.planned, 4);
     expect(streak(habit('eng'), snap.done, today), 3);
     expect(streak(habit('water'), snap.done, today), 6);
     expect(streak(habit('run'), snap.done, today), 2);
     expect(streak(habit('rea'), snap.done, today), 2);
+  });
+
+  test('a fresh page uses the phone language for the five names', () {
+    final russian = lookupAppLocalizations(const Locale('ru'));
+    final snap = seed(
+      today,
+      english: russian.seedEnglish,
+      water: russian.seedWater,
+    );
+    expect(
+      snap.habits.firstWhere((habit) => habit.id == 'eng').name,
+      'Английский',
+    );
+    expect(snap.habits.firstWhere((habit) => habit.id == 'water').name, 'Вода');
+    expect(seed(today).habits.map((habit) => habit.name).first, 'Run');
+  });
+
+  test('every language file has the english keys', () {
+    final english =
+        jsonDecode(File('lib/l10n/app_en.arb').readAsStringSync()) as Map;
+    final keys = english.keys.where((key) => !'$key'.startsWith('@')).toSet();
+    for (final code in [
+      'nl',
+      'ru',
+      'de',
+      'fr',
+      'es',
+      'pt',
+      'ar',
+      'zh',
+      'ko',
+      'hi',
+      'ja',
+    ]) {
+      final file =
+          jsonDecode(File('lib/l10n/app_$code.arb').readAsStringSync()) as Map;
+      final other = file.keys.where((key) => !'$key'.startsWith('@')).toSet();
+      expect(other, keys, reason: code);
+      expect(file['appTitle'], 'DAY Today Plan');
+    }
   });
 
   test('checking a habit is written to the repository', () async {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app.dart';
+import '../copy.dart';
 import '../models.dart';
 import '../theme.dart';
 import '../widgets/paper.dart';
@@ -49,13 +50,13 @@ class _NewHabitScreenState extends State<NewHabitScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, pageInset, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(8, 8, pageInset, 0),
             child: Row(
               children: [
                 BackChevron(onPressed: () => Navigator.of(context).pop()),
                 const SizedBox(width: 4),
                 MarkerText(
-                  'New habit',
+                  context.l10n.newHabit,
                   style: AppText.of(size: 26, weight: FontWeight.w700),
                 ),
               ],
@@ -66,7 +67,7 @@ class _NewHabitScreenState extends State<NewHabitScreen> {
               padding: const EdgeInsets.fromLTRB(pageInset, 22, pageInset, 16),
               children: [
                 Text(
-                  'Name',
+                  context.l10n.nameLabel,
                   style: AppText.of(size: 18, weight: FontWeight.w700),
                 ),
                 const SizedBox(height: 8),
@@ -84,7 +85,7 @@ class _NewHabitScreenState extends State<NewHabitScreen> {
                 ),
                 const SizedBox(height: 28),
                 Text(
-                  'Days',
+                  context.l10n.daysLabel,
                   style: AppText.of(size: 18, weight: FontWeight.w700),
                 ),
                 const SizedBox(height: 12),
@@ -99,7 +100,7 @@ class _NewHabitScreenState extends State<NewHabitScreen> {
                 ),
                 const SizedBox(height: 28),
                 Text(
-                  'Color',
+                  context.l10n.colorLabel,
                   style: AppText.of(size: 18, weight: FontWeight.w700),
                 ),
                 const SizedBox(height: 12),
@@ -113,7 +114,7 @@ class _NewHabitScreenState extends State<NewHabitScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(pageInset, 0, pageInset, 12),
             child: PrimaryButton(
-              label: 'Save habit',
+              label: context.l10n.saveHabit,
               onPressed: _ready ? _save : null,
             ),
           ),

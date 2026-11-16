@@ -1,0 +1,120 @@
+{
+  "@@locale": "en",
+  "appTitle": "DAY Today Plan",
+  "@appTitle": {
+    "description": "Product name. Do not translate."
+  },
+  "todayPlan": "Today's plan",
+  "weekdayPlan": "{weekday}'s plan",
+  "@weekdayPlan": {
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "scoreOf": "{done} of {planned}",
+  "@scoreOf": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "planned": {
+        "type": "int"
+      }
+    }
+  },
+  "backToToday": "Back to today",
+  "emptyPlan": "Tap + and plant the first habit.",
+  "freeDay": "A free day.",
+  "nothingPlanned": "Nothing planned for this day.",
+  "newHabit": "New habit",
+  "addNewHabit": "+ New habit",
+  "nameLabel": "Name",
+  "habitNameHint": "Habit name",
+  "daysLabel": "Days",
+  "colorLabel": "Color",
+  "saveHabit": "Save habit",
+  "saveChanges": "Save changes",
+  "archive": "Archive",
+  "progress": "Progress · {month}",
+  "@progress": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "dayStreak": "day streak",
+  "daysTotal": "days total",
+  "leaveTitle": "Leave without saving?",
+  "leaveMessage": "The name, days, and color stay as they were.",
+  "discard": "Discard",
+  "keep": "Keep",
+  "archiveTitle": "Archive {name}?",
+  "@archiveTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "archiveMessage": "It leaves the plan. The history stays on this phone.",
+  "back": "Back",
+  "previousMonth": "Previous month",
+  "nextMonth": "Next month",
+  "adLabel": "Advertisement placeholder",
+  "adMark": "AD",
+  "openHabit": "Open {name}",
+  "@openHabit": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "markDone": "Mark {name} done",
+  "@markDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "markNotDone": "Mark {name} not done",
+  "@markNotDone": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "habitCardLabel": "{name}, {count, plural, =1{1 day streak} other{{count} day streak}}",
+  "@habitCardLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "wdMo": "Mo",
+  "wdTu": "Tu",
+  "wdWe": "We",
+  "wdTh": "Th",
+  "wdFr": "Fr",
+  "wdSa": "Sa",
+  "wdSu": "Su",
+  "seedRun": "Run",
+  "seedEnglish": "English",
+  "seedStretch": "Stretch",
+  "seedReading": "Reading",
+  "seedWater": "Water",
+  "suggestGym": "Gym",
+  "suggestRun": "Run",
+  "suggestRead": "Read",
+  "suggestWater": "Water",
+  "suggestStretch": "Stretch"
+}

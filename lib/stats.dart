@@ -1,13 +1,11 @@
 import 'models.dart';
 
-/// Finished slots over planned slots. The "1 of 5" and "41 of 52" counters.
+/// Finished slots over planned slots. The screen turns these into "1 of 5".
 class Score {
   const Score(this.done, this.planned);
 
   final int done;
   final int planned;
-
-  String get label => '$done of $planned';
 }
 
 Score scoreBetween(

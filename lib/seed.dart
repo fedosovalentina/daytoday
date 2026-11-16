@@ -3,18 +3,25 @@ import 'models.dart';
 /// A first page so the notebook is not blank.
 /// Recent days are kept, the 9th and 27th are missed, so the rings and
 /// streaks have something honest to show.
-HabitSnapshot seed(DateTime now) {
+HabitSnapshot seed(
+  DateTime now, {
+  String run = 'Run',
+  String english = 'English',
+  String stretch = 'Stretch',
+  String reading = 'Reading',
+  String water = 'Water',
+}) {
   final today = dateOnly(now);
-  const habits = [
+  final habits = [
     Habit(
       id: 'run',
-      name: 'Run',
+      name: run,
       tone: HabitTone.peach,
       days: {DateTime.monday, DateTime.wednesday, DateTime.friday},
     ),
     Habit(
       id: 'eng',
-      name: 'English',
+      name: english,
       tone: HabitTone.mint,
       days: {
         DateTime.monday,
@@ -25,19 +32,19 @@ HabitSnapshot seed(DateTime now) {
     ),
     Habit(
       id: 'str',
-      name: 'Stretch',
+      name: stretch,
       tone: HabitTone.lavender,
       days: {DateTime.wednesday, DateTime.thursday, DateTime.sunday},
     ),
     Habit(
       id: 'rea',
-      name: 'Reading',
+      name: reading,
       tone: HabitTone.blue,
       days: {DateTime.monday, DateTime.wednesday, DateTime.thursday},
     ),
     Habit(
       id: 'water',
-      name: 'Water',
+      name: water,
       tone: HabitTone.yellow,
       days: {
         DateTime.monday,

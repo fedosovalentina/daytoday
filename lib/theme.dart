@@ -23,6 +23,23 @@ abstract final class AppColors {
 }
 
 abstract final class AppText {
+  /// Shantell covers Latin and Cyrillic. Arabic, CJK, and Devanagari
+  /// fall through to a system face that actually has the glyphs.
+  static const fallbacks = [
+    'Noto Sans',
+    'Noto Naskh Arabic',
+    'Noto Sans Arabic',
+    'Geeza Pro',
+    'Noto Sans CJK SC',
+    'PingFang SC',
+    'Hiragino Sans',
+    'Hiragino Sans GB',
+    'Apple SD Gothic Neo',
+    'Noto Sans Devanagari',
+    'Kohinoor Devanagari',
+    'sans-serif',
+  ];
+
   static TextStyle of({
     double size = 16,
     FontWeight weight = FontWeight.w600,
@@ -32,6 +49,7 @@ abstract final class AppText {
   }) {
     return TextStyle(
       fontFamily: 'ShantellSans',
+      fontFamilyFallback: fallbacks,
       fontWeight: weight,
       fontStyle: italic ? FontStyle.italic : FontStyle.normal,
       fontSize: size,
@@ -48,6 +66,7 @@ abstract final class AppTheme {
       brightness: Brightness.light,
       scaffoldBackgroundColor: AppColors.paper,
       fontFamily: 'ShantellSans',
+      fontFamilyFallback: AppText.fallbacks,
       colorScheme: const ColorScheme.light(
         primary: AppColors.ink,
         onPrimary: AppColors.marker,
@@ -58,6 +77,7 @@ abstract final class AppTheme {
     return base.copyWith(
       textTheme: base.textTheme.apply(
         fontFamily: 'ShantellSans',
+        fontFamilyFallback: AppText.fallbacks,
         bodyColor: AppColors.ink,
         displayColor: AppColors.ink,
       ),

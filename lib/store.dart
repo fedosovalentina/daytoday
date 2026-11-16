@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'copy.dart';
 import 'models.dart';
 import 'seed.dart';
 
@@ -59,14 +60,23 @@ class HabitStore extends ChangeNotifier {
   /// A broken save falls back to the seed in memory so the app still opens.
   static Future<HabitStore> open() async {
     final today = DateTime.now();
+    final names = deviceCopy();
+    HabitSnapshot planted() => seed(
+      today,
+      run: names.seedRun,
+      english: names.seedEnglish,
+      stretch: names.seedStretch,
+      reading: names.seedReading,
+      water: names.seedWater,
+    );
     try {
       final repository = PrefsRepository();
       final saved = await repository.load();
-      final snapshot = saved ?? seed(today);
+      final snapshot = saved ?? planted();
       if (saved == null) await repository.save(snapshot);
       return HabitStore(repository: repository, snapshot: snapshot);
     } catch (_) {
-      return HabitStore(repository: MemoryRepository(), snapshot: seed(today));
+      return HabitStore(repository: MemoryRepository(), snapshot: planted());
     }
   }
 

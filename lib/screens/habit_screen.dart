@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app.dart';
+import '../copy.dart';
 import '../models.dart';
 import '../stats.dart';
 import '../theme.dart';
@@ -57,11 +58,12 @@ class _HabitScreenState extends State<HabitScreen> {
       Navigator.of(context).pop();
       return;
     }
+    final copy = context.l10n;
     final discard = await confirm(
       context,
-      title: 'Leave without saving?',
-      message: 'The name, days, and color stay as they were.',
-      action: 'Discard',
+      title: copy.leaveTitle,
+      message: copy.leaveMessage,
+      action: copy.discard,
     );
     if (discard && mounted) Navigator.of(context).pop();
   }
@@ -75,11 +77,12 @@ class _HabitScreenState extends State<HabitScreen> {
   }
 
   Future<void> _archive(Habit habit) async {
+    final copy = context.l10n;
     final archive = await confirm(
       context,
-      title: 'Archive ${habit.name}?',
-      message: 'It leaves the plan. The history stays on this phone.',
-      action: 'Archive',
+      title: copy.archiveTitle(habit.name),
+      message: copy.archiveMessage,
+      action: copy.archive,
     );
     if (!archive || !mounted) return;
     final store = HabitScope.of(context);
@@ -102,6 +105,7 @@ class _HabitScreenState extends State<HabitScreen> {
     final dirty = _dirty(habit);
     final kept = streak(habit, store.done, today);
     final total = daysTotal(habit, store.done);
+    final month = monthScore([habit], store.done, _month);
 
     return PopScope(
       canPop: !dirty,
@@ -113,7 +117,7 @@ class _HabitScreenState extends State<HabitScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, pageInset, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(8, 8, pageInset, 0),
               child: Row(
                 children: [
                   BackChevron(onPressed: () => _leave(dirty)),
@@ -122,7 +126,7 @@ class _HabitScreenState extends State<HabitScreen> {
                     child: HabitNameField(
                       controller: _name,
                       code: HabitLabel.fromName(_name.text).code,
-                      hint: 'Name',
+                      hint: context.l10n.nameLabel,
                       onChanged: (_) => setState(() {}),
                     ),
                   ),
@@ -139,7 +143,7 @@ class _HabitScreenState extends State<HabitScreen> {
                 ),
                 children: [
                   Text(
-                    'Days',
+                    context.l10n.daysLabel,
                     style: AppText.of(size: 18, weight: FontWeight.w700),
                   ),
                   const SizedBox(height: 12),
@@ -154,7 +158,7 @@ class _HabitScreenState extends State<HabitScreen> {
                   ),
                   const SizedBox(height: 22),
                   Text(
-                    'Color',
+                    context.l10n.colorLabel,
                     style: AppText.of(size: 18, weight: FontWeight.w700),
                   ),
                   const SizedBox(height: 12),
@@ -164,7 +168,7 @@ class _HabitScreenState extends State<HabitScreen> {
                   ),
                   const SizedBox(height: 28),
                   Text(
-                    'Progress · ${monthNames[_month.month - 1]}',
+                    context.l10n.progress(monthName(context, _month)),
                     style: AppText.of(size: 20, weight: FontWeight.w700),
                   ),
                   const SizedBox(height: 12),
@@ -175,7 +179,7 @@ class _HabitScreenState extends State<HabitScreen> {
                           color: AppColors.peach,
                           icon: const FlameIcon(size: 16),
                           value: '$kept',
-                          caption: 'day streak',
+                          caption: context.l10n.dayStreak,
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -184,15 +188,15 @@ class _HabitScreenState extends State<HabitScreen> {
                           color: AppColors.blue,
                           icon: const CalendarIcon(),
                           value: '$total',
-                          caption: 'days total',
+                          caption: context.l10n.daysTotal,
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 18),
                   MonthTitle(
-                    label: monthNames[_month.month - 1],
-                    trailing: monthScore([habit], store.done, _month).label,
+                    label: monthName(context, _month),
+                    trailing: scoreLabel(context, month.done, month.planned),
                     onPrevious: () => _shiftMonth(-1),
                     onNext: () => _shiftMonth(1),
                   ),
@@ -229,7 +233,7 @@ class _HabitScreenState extends State<HabitScreen> {
                   Expanded(
                     flex: 2,
                     child: GhostButton(
-                      label: 'Archive',
+                      label: context.l10n.archive,
                       onPressed: () => _archive(habit),
                     ),
                   ),
@@ -237,7 +241,7 @@ class _HabitScreenState extends State<HabitScreen> {
                   Expanded(
                     flex: 3,
                     child: PrimaryButton(
-                      label: 'Save changes',
+                      label: context.l10n.saveChanges,
                       onPressed: _canSave ? () => _save(habit) : null,
                     ),
                   ),
